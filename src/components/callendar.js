@@ -90,6 +90,7 @@ export default function Calendar() {
                 <button className='btn' onClick={() => {dispatch(changeMonth('+'))}}>{ '>' }</button>
             </CalendarHeader>
             <hr />
+            <br />
             <CalendarBox>
                 {
                     ConstData.weeks.map((item, idx) => {
