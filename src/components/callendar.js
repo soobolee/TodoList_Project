@@ -35,6 +35,9 @@ const CalendarItem = styled.div`
 
 
 function makeCalendar(date) {
+    let today            = new Date();
+    today                = `${today.getFullYear()}.${today.getMonth() + 1}.${today.getDate()}`;
+
     const currentYear    = new Date(date).getFullYear();
     const currentMonth   = new Date(date).getMonth() + 1;
 
@@ -45,10 +48,16 @@ function makeCalendar(date) {
     const monthNextDay   = Math.ceil(monthLimitDay / 7) * 7;
 
     let totalDate = Array.from({length : monthNextDay}, (item, idx) => {
-        if (totalFirstDay > idx || idx > monthLimitDay) {
-            return 0;
+        let isToday = false;
+        let compareToday = `${currentYear}.${currentMonth}.${idx - totalFirstDay}`;
+
+        if (compareToday === today) {
+            isToday = true;
         }
-        return idx - totalFirstDay;
+        if (totalFirstDay > idx || idx > monthLimitDay) {
+            return { date : 0, isToday : isToday};
+        }
+        return {date : idx - totalFirstDay, isToday : isToday};
     });
 
     return totalDate;
@@ -84,12 +93,12 @@ export default function Calendar() {
             <CalendarBox>
                 {
                     ConstData.weeks.map((item, idx) => {
-                        return <CalendarItem key={idx}>{ item }</CalendarItem>
+                        return <CalendarItem key={idx} style={{ height : '60px' }}>{ item }</CalendarItem>
                     })
                 }
                 {
                     calendarData.map((item, idx) => {
-                        return <CalendarItem key={idx}><span className={ item && 'today' }>{ item === 0 ? '' : item }</span></CalendarItem>
+                        return <CalendarItem key={idx}><span className={`day ${item.isToday && 'bg-gray'}` }>{ item.date === 0 ? '' : item.date }</span></CalendarItem>
                     })
                 }
                     
