@@ -14,8 +14,8 @@ let todoList = createSlice({
             const item = action.payload;
             const idx  = state.findIndex(obj => obj.id === item);
 
-            state.splice(idx, 1);
             localStorage.setItem('todoList', JSON.stringify(state));
+            state.splice(idx, 1);
         },
         updateTodoList (state, action) {
             const item = action.payload;

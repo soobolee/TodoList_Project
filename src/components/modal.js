@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { setFadeEffect, setTodoList, updateTodoList } from "../store/store";
+import { setFadeEffect, setTodoList, updateTodoList, setTodoId } from "../store/store";
 import { useEffect, useState } from "react";
 
 const ModalBoxDiv = styled.div`
@@ -69,15 +69,20 @@ export default function Modal() {
     let [title, setTitle]     = useState('');
     let [content, setContent] = useState('');
 
+
+    // 수정 필요 쓸데 없이 렌더링이 자주 시키는 듯 함
     useEffect(() => {
-        if (todoId.id === null) {
+        console.log(todoId);
+        if (!todoId.id) {
             setTitle('');
             setContent('');
         } else {
-            const todoItem = todoList.find((item) => item.id === todoId.id);
-
-            setTitle(todoItem.title);
-            setContent(todoItem.content);
+            if (btnString !== '삭제') {
+                const todoItem = todoList.find((item) => item.id === todoId.id);
+    
+                setTitle(todoItem.title);
+                setContent(todoItem.content);
+            }
         }
     }, [todoId])
 
@@ -86,8 +91,6 @@ export default function Modal() {
             <ModalBox>
                 <CloseBtn type="button" value={'X'} className="btn" onClick={() => {
                     dispatch(setFadeEffect('no-show'))
-                    setTitle('');
-                    setContent('');
                 }}></CloseBtn>
                 <p>제목</p>
                 <input type="text" className="titleInput" value={title} onChange={(e) => {
@@ -120,8 +123,7 @@ export default function Modal() {
                     }
                     
                     dispatch(setFadeEffect('no-show'));
-                    setTitle('');
-                    setContent('');
+                    dispatch(setTodoId(false));
 
                 }}>{ btnString.str }</button>
             </ModalBox>

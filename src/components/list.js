@@ -94,7 +94,11 @@ export default function List() {
             <ListBox className="list-box">
                 {
                     todoList.map((item, idx) => {
-                        return  <ListItem key={idx}>
+                        return  <ListItem key={idx} onClick={(e) => {
+                            dispatch(setBtnString('수정'));
+                            dispatch(setTodoId(item.id));
+                            dispatch(setFadeEffect('show'));
+                        }}>
                                     <ListContent>
                                         <p>{item.title}</p>
                                         <div>{item.content}</div>
@@ -105,8 +109,10 @@ export default function List() {
                                             dispatch(setTodoId(item.id));
                                             dispatch(setFadeEffect('show'));
                                         }}>수정</span>
-                                        <span onClick={() => {
+                                        <span onClick={(e) => {
+                                            e.stopPropagation();
                                             dispatch(deleteTodoList(item.id));
+                                            dispatch(setBtnString('삭제'));
                                         }}>삭제</span>
                                     </ListButton>
                                 </ListItem>
